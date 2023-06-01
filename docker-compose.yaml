@@ -1,0 +1,41 @@
+version: '3.8'
+
+volumes:
+  mysql_vol:
+
+networks:
+  web_net:
+    driver: bridge
+
+services:
+  db:
+    image: mysql:latest
+    container_name: mysql_db
+    environment:
+      MYSQL_USER: dbadmin
+      MYSQL_PASSWORD: dbpass
+      MYSQL_ROOT_PASSWORD: database
+    volumes:
+      - mysql_vol:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      - web_net
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: 
+      PMA_PASSWORD: 
+    ports:
+      - 8080:80
+    networks:
+      - web_net
+    depends_on:
+      - db 
+      
+
+
